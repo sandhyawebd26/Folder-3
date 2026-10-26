@@ -1,22 +1,23 @@
-import { GeistSans } from 'geist/font/sans'
+import type { Metadata, Viewport } from 'next'
 import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans'
+import type { ReactNode } from 'react'
 
 import '@/app/globals.css'
-import { cn } from '@/lib/utils'
-import { TailwindIndicator } from '@/components/tailwind-indicator'
+import { SiteHeader } from '@/components/SiteHeader'
 import { Providers } from '@/components/providers'
-import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
+import { cn } from '@/lib/utils'
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: process.env.VERCEL_URL
     ? new URL(`https://${process.env.VERCEL_URL}`)
     : undefined,
   title: {
-    default: 'Next.js AI Chatbot',
-    template: `%s - Next.js AI Chatbot`
+    default: 'A Una Milla',
+    template: '%s | A Una Milla'
   },
-  description: 'An AI-powered chatbot template built with Next.js and Vercel.',
+  description: 'Same trip. Much less money.',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
@@ -24,39 +25,32 @@ export const metadata = {
   }
 }
 
-export const viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' }
-  ]
+export const viewport: Viewport = {
+  themeColor: '#F9F6F1'
 }
 
 interface RootLayoutProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          'font-sans antialiased',
-          GeistSans.variable,
-          GeistMono.variable
-        )}
-      >
-        <Toaster position="top-center" />
+      <body className={cn('font-sans antialiased', GeistSans.variable, GeistMono.variable)}>
         <Providers
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
+          <div className="min-h-screen bg-background text-foreground">
+            <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6">
+              <SiteHeader />
+              <main className="flex flex-1 flex-col">{children}</main>
+            </div>
           </div>
-          <TailwindIndicator />
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>
